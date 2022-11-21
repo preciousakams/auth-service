@@ -1,0 +1,30 @@
+version: '2'
+services:
+  auth-service:
+    build: .
+    container_name: auth-service
+    ports:
+      - "3002:80"
+    volumes:
+    - ./:/var/www/html
+    - /var/www/html/vendor
+    networks:
+      - liveizy_network
+    restart: always
+
+  scheduler:
+    build: .
+    container_name: scheduler
+    image: laravel-api
+    command: /usr/local/bin/run-scheduler.sh
+    restart: unless-stopped
+    volumes:
+    - ./:/var/www/html
+    - /var/www/html/vendor
+    networks:
+      - liveizy_network
+volumes:
+    db_data:
+networks:
+  liveizy_network:
+    external: true
